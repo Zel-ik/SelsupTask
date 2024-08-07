@@ -19,13 +19,13 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.TimeUnit;
 
 @SpringBootApplication
-public class SelSupTestTaskApplication {
+public class CrptApi {
 
-    public class CreateDocumentService {
+    public class CreateDocument {
         private final Bucket bucket;
 
 
-        public CreateDocumentService(TimeUnit timeUnit, int requestLimit) {
+        public CreateDocument(TimeUnit timeUnit, int requestLimit) {
             // по дефолту можем отправить requestLimit запросов в минуту
             Refill refill = Refill.intervally(requestLimit, Duration.ofMinutes(1));
             switch (timeUnit) {
