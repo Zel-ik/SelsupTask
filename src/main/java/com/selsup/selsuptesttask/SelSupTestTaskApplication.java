@@ -6,13 +6,7 @@ import io.github.bucket4j.Bucket;
 import io.github.bucket4j.Refill;
 import lombok.Data;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.client.RestTemplate;
 
-import java.io.PipedInputStream;
-import java.io.PipedOutputStream;
 import java.io.Serializable;
 import java.net.URI;
 import java.net.http.HttpClient;
@@ -22,7 +16,6 @@ import java.time.Duration;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ForkJoinPool;
 import java.util.concurrent.TimeUnit;
 
 @SpringBootApplication
@@ -34,10 +27,10 @@ public class SelSupTestTaskApplication {
 
         public CreateDocumentService(TimeUnit timeUnit, int requestLimit) {
             // по дефолту можем отправить requestLimit запросов в минуту
-            Refill refill = Refill.intervally(requestLimit, Duration.ofMinutes(1));;
-            switch (timeUnit){
-                case SECONDS -> refill =  Refill.intervally(requestLimit, Duration.ofSeconds(1));
-                case HOURS -> refill =  Refill.intervally(requestLimit, Duration.ofHours(1));
+            Refill refill = Refill.intervally(requestLimit, Duration.ofMinutes(1));
+            switch (timeUnit) {
+                case SECONDS -> refill = Refill.intervally(requestLimit, Duration.ofSeconds(1));
+                case HOURS -> refill = Refill.intervally(requestLimit, Duration.ofHours(1));
             }
 
             Bandwidth limit = Bandwidth.classic(requestLimit, refill);
@@ -47,7 +40,7 @@ public class SelSupTestTaskApplication {
         }
 
         public void createDocument(Document document, String mark) {
-            if(bucket.tryConsume(1)){
+            if (bucket.tryConsume(1)) {
                 HttpClient client = HttpClient.newHttpClient();
                 Gson gson = new Gson();
                 String json = gson.toJson(document);
@@ -80,12 +73,14 @@ public class SelSupTestTaskApplication {
         String registrationNumber;
 
     }
+
     @Data
-    public class Description{
+    public class Description {
         String participantInn;
     }
+
     @Data
-    public class Product{
+    public class Product {
         String certificateDocument;
         LocalDate certificateDocumentDate;
         String certificateDocumentNumber;
